@@ -24,7 +24,8 @@ public class HandleChrome
         var driverService = ChromeDriverService.CreateDefaultService();
         driverService.HideCommandPromptWindow = true;
         ChromeOptions options = new ChromeOptions();
-        options.AddArguments("--disable-notifications", "headless");
+        options.AddArguments("--disable-notifications");
+        // Removed "headless" argument
         driver = new ChromeDriver(driverService, options);
         driver.Navigate().GoToUrl(url);
     }
@@ -84,53 +85,59 @@ public class HandleChrome
         driver.FindElement(By.XPath("//button[contains(text(), 'Đăng nhập')]")).Click();
     }
 
-    public void Test()
+    public void test()
     {
-        List<School_Schedule> schedules = new List<School_Schedule>();
+        // Điều hướng đến URL của thời khóa biểu
+        driver.Navigate().GoToUrl("https://sinhvien.hutech.edu.vn/#/sinhvien/hoc-vu/thoi-khoa-bieu");
+
+        // Tạm dừng 2 giây để trang tải
+        Thread.Sleep(2000);
+        int y = 1;
         for (int i = 0; i < 4; i++)
         {
             Thread.Sleep(2000);
-            List<string> ThoiGian = new List<string>();
-            int CountListTime = 0;
-
-            IReadOnlyCollection<IWebElement> rows = driver.FindElements(By.CssSelector(".table.font-size-lich-thi tbody > tr"));
-            foreach (IWebElement row in rows)
+            IReadOnlyCollection<IWebElement> rows = driver.FindElements(By.XPath("//table[contains(@class, 'font-size-lich-thi')]//tbody//tr"));
+            var rows2 = rows;
+            foreach (IWebElement rowx in rows2)
             {
                 try
                 {
-                    ThoiGian.Add(row.FindElement(By.CssSelector("th.bagroud")).Text);
-                }
-                catch (NoSuchElementException) { }
-            }
-
-            foreach (IWebElement row in rows)
-            {
-                try
-                {
-                    string tiet = row.FindElement(By.CssSelector("td.text-center")).Text;
-                    string maMonHocTenMon = row.FindElement(By.CssSelector("td.pt-4 p:nth-child(1)")).Text;
-                    string phongHoc = row.FindElement(By.CssSelector("td.pt-4 span strong")).Text;
-
-                    schedules.Add(new School_Schedule
+                    foreach (IWebElement row in rows)
                     {
-                        ThoiGian = ThoiGian[CountListTime],
-                        MaMonHocTenMon = maMonHocTenMon,
-                        Tiet = tiet,
-                        PhongHoc = phongHoc
-                    });
+                        try
+                        {
+                            // Lấy tiết học từ cột có class 'text-center'
+                            string tiet = row.FindElement(By.XPath(".//td[contains(@class, 'text-center')]")).Text;
 
-                    CountListTime++;
+                            // Lấy mã môn học và tên môn từ cột có class 'pt-4'
+                            string maMonHocTenMon = row.FindElement(By.XPath(".//td[contains(@class, 'pt-4')]//p")).Text;
+
+                            // Lấy phòng học từ cột có class 'pt-4'
+                            string phongHoc = row.FindElement(By.XPath(".//td[contains(@class, 'pt-4')]//span//strong")).Text;
+
+
+                            Terminal.gI().Print($"{rowx.FindElement(By.XPath(".//th[contains(@class, 'bagroud')]")).Text}", 0, y, ConsoleColor.Green);
+                            Terminal.gI().Print($"{maMonHocTenMon}", 30, y, ConsoleColor.Blue);
+                            Terminal.gI().Print($"{tiet}", 70, y, ConsoleColor.Green);
+                            Terminal.gI().Print($"{phongHoc}", 90, y, ConsoleColor.Blue);
+
+                            y++;
+                        }
+                        catch (NoSuchElementException)
+                        {
+                            // Bỏ qua hàng không có các phần tử cần truy cập
+                        }
+                    }
                 }
-                catch (NoSuchElementException) { }
+                catch (NoSuchElementException)
+                {
+                }
             }
-
+            
             IWebElement rightButton = driver.FindElement(By.CssSelector(".col-md-6 .fa-chevron-right"));
-            ThoiGian.Clear();
             rightButton.Click();
         }
-
-        // Lưu thông tin vào Data
-        Data.Gi().Schedule = schedules;
+        Console.ResetColor();
     }
 
     public void ShowMenu()
