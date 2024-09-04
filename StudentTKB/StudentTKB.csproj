@@ -100,10 +100,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calendar\Creator.cs" />
+    <Compile Include="Calendar\Handle.cs" />
     <Compile Include="Calendar\Service.cs" />
+    <Compile Include="Chrome\HandleChrome.cs" />
     <Compile Include="Data\Calendar_personal.cs" />
     <Compile Include="Data\Data.cs" />
-    <Compile Include="Data\ReadFileJson.cs" />
+    <Compile Include="Data\FileJson.cs" />
     <Compile Include="Data\School_Schedule.cs" />
     <Compile Include="Data\Setting.cs" />
     <Compile Include="Func\Terminal.cs" />
@@ -114,9 +116,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Chrome\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Selenium.WebDriver.4.24.0\build\Selenium.WebDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.4.24.0\build\Selenium.WebDriver.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

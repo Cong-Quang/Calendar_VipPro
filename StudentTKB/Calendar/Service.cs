@@ -5,13 +5,12 @@ using Google.Apis.Util.Store;
 using System;
 using System.IO;
 using System.Threading;
-
-
 public class Service
 {
     private static readonly string[] Scopes = { CalendarService.Scope.Calendar };
     private static readonly string ApplicationName = "Google Calendar API .NET";
 
+    [Obsolete]
     public CalendarService InitializeService(string OAuth)
     {
         UserCredential credential;

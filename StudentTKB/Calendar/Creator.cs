@@ -1,5 +1,5 @@
-﻿using Google.Apis.Calendar.v3.Data;
-using Google.Apis.Calendar.v3;
+﻿using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
 using System;
 public class Creator
 {
@@ -9,29 +9,43 @@ public class Creator
     {
         _service = service;
     }
-
-    public Event CreateEvent()
+    /// <summary>
+    /// Tạo sự kiện mới với các tham số tùy chỉnh.
+    /// </summary>
+    /// <param name="summary">Tiêu đề của sự kiện.</param>
+    /// <param name="location">Địa điểm của sự kiện.</param>
+    /// <param name="description">Mô tả của sự kiện.</param>
+    /// <param name="startDateTime">Thời gian bắt đầu của sự kiện (ISO 8601 format).</param>
+    /// <param name="endDateTime">Thời gian kết thúc của sự kiện (ISO 8601 format).</param>
+    /// <param name="timeZone">Múi giờ của sự kiện.</param>
+    /// <returns>Đối tượng Event đã được tạo.</returns>
+    public Event CreateEvent(string summary, string location, string description, DateTime startDateTime, DateTime endDateTime, string timeZone = "Asia/Ho_Chi_Minh")
     {
         var newEvent = new Event()
         {
-            Summary = "Cuộc họp dự án",
-            Location = "Trực tuyến",
-            Description = "Cuộc họp với đội phát triển",
+            Summary = summary,
+            Location = location,
+            Description = description,
             Start = new EventDateTime()
             {
-                DateTime = DateTime.Parse("2024-09-05T10:00:00+07:00"),
-                TimeZone = "Asia/Ho_Chi_Minh",
+                DateTime = startDateTime,
+                TimeZone = timeZone,
             },
             End = new EventDateTime()
             {
-                DateTime = DateTime.Parse("2024-09-05T11:00:00+07:00"),
-                TimeZone = "Asia/Ho_Chi_Minh",
+                DateTime = endDateTime,
+                TimeZone = timeZone,
             }
         };
 
         return newEvent;
     }
-
+    /// <summary>
+    /// Thêm sự kiện vào lịch.
+    /// </summary>
+    /// <param name="calendarId">ID của lịch.</param>
+    /// <param name="newEvent">Đối tượng Event muốn thêm vào lịch.</param>
+    /// <returns>Đối tượng Event đã được thêm vào lịch.</returns>
     public Event InsertEvent(string calendarId, Event newEvent)
     {
         var request = _service.Events.Insert(newEvent, calendarId);
