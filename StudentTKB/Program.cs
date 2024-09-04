@@ -20,51 +20,38 @@ class Program
 
     static void RunCrawl()
     {
-        // Mở trình duyệt và điều hướng đến trang đăng nhập
         HandleChrome.Instance().OpenChrome("https://sinhvien.hutech.edu.vn/#/sinhvien/login/login");
-
-        // Đợi trang tải xong
-        HandleChrome.Instance().WaitForJavascript();
-
-        // Đăng nhập
-        HandleChrome.Instance().Login("2380601806", "02082003Itcoder@");
-
-        // Đợi trang tải xong sau khi đăng nhập
-        HandleChrome.Instance().WaitForJavascript();
-
-        // Crawl dữ liệu thời khóa biểu
+        Thread.Sleep(2000);
+        HandleChrome.Instance().Login(Data.Gi().Setting.userName, Data.Gi().Setting.password);
+        Thread.Sleep(2000);
         try
         {
-            HandleChrome.Instance().test();
+            HandleChrome.Instance().Test();
+            ShowCrawledData(); // Add this line to show the crawled data
         }
-        catch (Exception)
-        {  // Đóng trình duyệt
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
             HandleChrome.Instance().CloseChrome(true);
             throw;
         }
 
-        // Đóng trình duyệt
         HandleChrome.Instance().CloseChrome(true);
-
     }
 
     static void ShowCrawledData()
     {
         var schedules = Data.Gi().Schedule;
-        if (schedules != null && schedules.Count > 0)
+
+        int i = 0;
+        foreach (var schedule in schedules)
         {
-            foreach (var schedule in schedules)
-            {
-                Console.WriteLine($"Thời gian: {schedule.ThoiGian}");
-                Console.WriteLine($"Mã Môn học - Tên môn: {schedule.MaMonHocTenMon}");
-                Console.WriteLine($"Tiết: {schedule.Tiet}");
-                Console.WriteLine($"Phòng: {schedule.PhongHoc}");
-                Console.WriteLine(new string('-', 50));
-            }
-        }
-        else
-        {
-            Console.WriteLine("Không có dữ liệu thời khóa biểu.");
+            Console.WriteLine($"{i++}" + new string('-', 80));
+
+            Console.WriteLine($"Thời gian: {schedule.ThoiGian}");
+            Console.WriteLine($"Mã Môn học - Tên môn: {schedule.MaMonHocTenMon}");
+            Console.WriteLine($"Tiết: {schedule.Tiet}");
+            Console.WriteLine($"Phòng: {schedule.PhongHoc}");
         }
     }
 }

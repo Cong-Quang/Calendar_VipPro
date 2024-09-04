@@ -19,6 +19,7 @@ public class Data
                 if (_instance == null)
                 {
                     _instance = new Data();
+                    _instance.Schedule = new List<School_Schedule>();
                     FileJson.Instance.GetSetting(url);
                 }
             }
