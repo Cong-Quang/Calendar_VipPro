@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using System.IO;
 using System.Threading;
 
 class Program
@@ -27,7 +26,7 @@ class Program
         try
         {
             HandleChrome.Instance().Test();
-            ShowCrawledData(); // Add this line to show the crawled data
+            ShowCrawledData();
         }
         catch (Exception ex)
         {

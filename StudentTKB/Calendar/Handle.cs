@@ -1,10 +1,5 @@
 ﻿using Google.Apis.Calendar.v3;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 public class Handle
 {
     private static Handle _instance;
@@ -34,6 +29,7 @@ public class Handle
 
     private readonly CalendarService _service;
 
+    [Obsolete]
     private Handle()
     {
         var calendarService = new Service();
